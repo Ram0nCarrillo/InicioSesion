@@ -4,6 +4,11 @@
  */
 package mx.itson.iniciosesion.ui;
 
+import static com.iniciosesion.encriptado.EncriptacionAES.encriptar;
+import com.iniciosesion.entidades.Colaborador;
+import javax.swing.JOptionPane;
+import com.iniciosesion.persistencia.ColaboradorDAO;
+
 /**
  *
  * @author darkheaven
@@ -14,10 +19,55 @@ public class RegistroDialog extends javax.swing.JDialog {
      * Creates new form RegistroDialog
      */
     public RegistroDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+        super(parent, "Registro de cuenta", true);
         initComponents();
     }
 
+    
+    private boolean validarCamposVacios() {
+    if (txtNombre.getText().trim().isEmpty()) {
+        mostrarError("Nombre", "No se ha ingresado un nombre");
+        return true;
+    }
+    
+    if (txtCorreo.getText().trim().isEmpty()) {
+        mostrarError("Correo", "No se ha ingresado un correo");
+        return true;
+    }
+    
+    if (pwContrasenia.getPassword().length == 0) {
+        mostrarError("Contraseña", "No se ha ingresado una contraseña");
+        return true;
+    }
+    
+    if (pwVerificacionContrasenia.getPassword().length == 0) {
+        mostrarError("Verificación", "No se ha ingresado la verificación de contraseña");
+        return true;
+    }
+    
+    return false;
+}
+
+    private void mostrarError(String campo, String mensaje) {
+        JOptionPane.showMessageDialog(
+                this,
+                mensaje,
+                "Error en campo: " + campo,
+                JOptionPane.ERROR_MESSAGE
+    );
+ }
+    private boolean validarContrasenias() {
+        String contrasenia = new String(pwContrasenia.getPassword());
+        String verificacion = new String(pwVerificacionContrasenia.getPassword());
+    
+        if (!contrasenia.equals(verificacion)) {
+            mostrarError("Contraseñas", "Las contraseñas no coinciden");
+            pwContrasenia.requestFocus();
+            return false;
+        }
+        return true;
+}
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,42 +78,55 @@ public class RegistroDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jPasswordField2 = new javax.swing.JPasswordField();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        lblNombre = new javax.swing.JLabel();
+        lblCorreo = new javax.swing.JLabel();
+        pwContrasenia = new javax.swing.JPasswordField();
+        pwVerificacionContrasenia = new javax.swing.JPasswordField();
+        lblContrasenia = new javax.swing.JLabel();
+        lblVerificacionContrasenia = new javax.swing.JLabel();
+        txtCorreo = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
+        lblRegistro = new javax.swing.JLabel();
+        btnAceptar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Nombre:");
+        jPanel1.setBackground(new java.awt.Color(102, 153, 255));
 
-        jLabel2.setText("Correo");
+        lblNombre.setFont(new java.awt.Font("DialogInput", 0, 15)); // NOI18N
+        lblNombre.setText("Nombre:");
 
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+        lblCorreo.setFont(new java.awt.Font("DialogInput", 0, 15)); // NOI18N
+        lblCorreo.setText("Correo");
+
+        pwContrasenia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
+                pwContraseniaActionPerformed(evt);
             }
         });
 
-        jPasswordField2.addActionListener(new java.awt.event.ActionListener() {
+        pwVerificacionContrasenia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField2ActionPerformed(evt);
+                pwVerificacionContraseniaActionPerformed(evt);
             }
         });
 
-        jLabel3.setText("Contraseña:");
+        lblContrasenia.setFont(new java.awt.Font("DialogInput", 0, 15)); // NOI18N
+        lblContrasenia.setText("Contraseña:");
 
-        jLabel4.setText("Verifique su contraseña:");
+        lblVerificacionContrasenia.setFont(new java.awt.Font("DialogInput", 0, 15)); // NOI18N
+        lblVerificacionContrasenia.setText("Verifique su contraseña:");
 
-        jLabel5.setText("REGISTRO");
+        lblRegistro.setFont(new java.awt.Font("DialogInput", 3, 18)); // NOI18N
+        lblRegistro.setText("REGISTRO");
 
-        jButton1.setText("Aceptar");
+        btnAceptar.setFont(new java.awt.Font("DialogInput", 0, 18)); // NOI18N
+        btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -74,21 +137,21 @@ public class RegistroDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel5)
+                            .addComponent(lblNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblCorreo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
+                        .addComponent(lblRegistro)
                         .addGap(50, 50, 50))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                            .addComponent(jTextField1)
-                            .addComponent(jPasswordField1)
-                            .addComponent(jPasswordField2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                            .addComponent(lblContrasenia)
+                            .addComponent(lblVerificacionContrasenia)
+                            .addComponent(txtNombre)
+                            .addComponent(txtCorreo)
+                            .addComponent(pwContrasenia)
+                            .addComponent(pwVerificacionContrasenia))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
@@ -97,26 +160,26 @@ public class RegistroDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jLabel1))
+                        .addComponent(lblNombre))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel5)))
+                        .addComponent(lblRegistro)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addComponent(lblCorreo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addComponent(lblContrasenia)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pwContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4)
+                .addComponent(lblVerificacionContrasenia)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(pwVerificacionContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAceptar))
                 .addContainerGap())
         );
 
@@ -134,19 +197,55 @@ public class RegistroDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jPasswordField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField2ActionPerformed
+    private void pwVerificacionContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwVerificacionContraseniaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField2ActionPerformed
+    }//GEN-LAST:event_pwVerificacionContraseniaActionPerformed
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+    private void pwContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwContraseniaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
+    }//GEN-LAST:event_pwContraseniaActionPerformed
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        // TODO add your handling code here:
+        if (validarCamposVacios()) {
+        return; // Si hay campos vacíos, salimos del método
+    }
+    
+    if (!validarContrasenias()) {
+        return;
+    }
+    try{
+      
+        String contrasenia = new String(pwContrasenia.getPassword());
+        String contraseniaEncriptada = encriptar(contrasenia);
+        
+        
+        Colaborador c = new Colaborador();
+        c.setNombre(txtNombre.getText());
+        c.setCorreo(txtCorreo.getText());
+        c.setContrasenia(contraseniaEncriptada);
+        
+        ColaboradorDAO colaboradorDAO = new ColaboradorDAO();
+        colaboradorDAO.crearColaborador(c);
+        
+        JOptionPane.showMessageDialog(this, 
+            "Registro exitoso!", 
+            "Éxito", 
+            JOptionPane.INFORMATION_MESSAGE);
+        this.dispose(); 
+        
+    }catch(Exception err){
+        System.err.println("Ocurrió un error durante el registro"+err.getMessage());
+    }
+    
+        
+    }//GEN-LAST:event_btnAceptarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -191,16 +290,16 @@ public class RegistroDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JButton btnAceptar;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel lblContrasenia;
+    private javax.swing.JLabel lblCorreo;
+    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblRegistro;
+    private javax.swing.JLabel lblVerificacionContrasenia;
+    private javax.swing.JPasswordField pwContrasenia;
+    private javax.swing.JPasswordField pwVerificacionContrasenia;
+    private javax.swing.JTextField txtCorreo;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

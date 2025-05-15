@@ -5,6 +5,7 @@
 package com.iniciosesion.persistencia;
 
 import com.iniciosesion.entidades.Administrador;
+import com.iniciosesion.utils.HibernateUtil;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,11 +15,10 @@ import org.hibernate.SessionFactory;
 
 public class AdministradorDAO {
     
-   private final SessionFactory sessionFactory;
-    
-   public AdministradorDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    } 
+   private static final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+
+    public AdministradorDAO() {
+    }
     
     
    public Administrador obtenerPorCorreo(String correo) {

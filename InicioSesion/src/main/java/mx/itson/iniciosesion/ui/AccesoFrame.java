@@ -4,8 +4,10 @@
  */
 package mx.itson.iniciosesion.ui;
 
+import com.iniciosesion.entidades.Administrador;
+import com.iniciosesion.persistencia.AdministradorDAO;
 import javax.swing.JOptionPane;
-
+import mx.itson.iniciosesion.ui.RegistroDialog;
 /**
  *
  * @author darkheaven
@@ -185,7 +187,24 @@ public class AccesoFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarActionPerformed
-        
+       
+       AdministradorDAO admin = new AdministradorDAO();
+
+       Administrador tempAdmin = admin.obtenerPorCorreo(txtCorreo.getText());
+
+       if(tempAdmin.equals(true)){
+         AccesoFrame.this.dispose();
+
+                VistaColaboradorFrame colaboradorFrame = new VistaColaboradorFrame();
+                colaboradorFrame.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(AccesoFrame.this,
+                    "No se encontró el correo. Acceso denegado.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+                txtCorreo.setText("");  
+       }
+ 
     }//GEN-LAST:event_btnVerificarActionPerformed
 
     private void pwContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwContraseniaActionPerformed
@@ -198,7 +217,8 @@ public class AccesoFrame extends javax.swing.JFrame {
 
     private void btnRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroActionPerformed
         // TODO add your handling code here:
-        
+        RegistroDialog dialog = new RegistroDialog(this,true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnRegistroActionPerformed
 
     /**

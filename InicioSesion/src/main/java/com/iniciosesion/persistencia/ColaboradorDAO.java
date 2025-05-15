@@ -5,6 +5,7 @@
 package com.iniciosesion.persistencia;
 
 import com.iniciosesion.entidades.Colaborador;
+import com.iniciosesion.utils.HibernateUtil;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,32 +20,28 @@ import org.hibernate.Transaction;
  */
 public class ColaboradorDAO {
     
-    private final SessionFactory sessionFactory;
-    
-    public ColaboradorDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    private static final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+
+    public ColaboradorDAO() {
     }
     
-    // Crear un nuevo colaborador
-    public Long crearColaborador(Colaborador colaborador) {
+    public void crearColaborador(Colaborador colaborador) {
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
-        Long colaboradorId = null;
         
         try {
             transaction = session.beginTransaction();
-            colaboradorId = (Long) session.save(colaborador);
+            session.save(colaborador); 
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
-            }
-            e.printStackTrace();
+        }
+            throw e; 
         } finally {
             session.close();
-        }
-        return colaboradorId;
     }
+}
     
     public Colaborador obtenerPorCorreo(String correo) {
         try (Session session = sessionFactory.openSession()) {
