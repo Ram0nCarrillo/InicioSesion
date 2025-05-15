@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class colaborador {
+public class Administrador {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +19,10 @@ public class colaborador {
     private String correo;
     private String contraseña;
 
-    public colaborador() {
+    public Administrador() {
     }
     
-    public colaborador(String nombre, String correo, String contraseña) {
+    public Administrador(String nombre, String correo, String contraseña) {
         this.nombre = nombre;
         this.correo = correo;
         this.contraseña = contraseña;

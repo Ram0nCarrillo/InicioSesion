@@ -10,22 +10,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class administrador {
+public class Colaborador {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nombre;
     private String correo;
-    private String contraseña;
+    private String contrasenia;
 
-    public administrador() {
+    public Colaborador() {
     }
     
-    public administrador(String nombre, String correo, String contraseña) {
+    public Colaborador(String nombre, String correo, String contrasenia) {
         this.nombre = nombre;
         this.correo = correo;
-        this.contraseña = contraseña;
+        this.contrasenia = contrasenia;
     }
     
     public int getId() {
@@ -52,11 +52,11 @@ public class administrador {
         this.correo = correo;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 }
