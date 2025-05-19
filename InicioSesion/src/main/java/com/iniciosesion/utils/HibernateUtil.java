@@ -9,7 +9,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-
+/**
+ * La clase quedo semi-obsoleta
+ * @author darkheaven
+ */
 public class HibernateUtil {
     
     private static SessionFactory factory;

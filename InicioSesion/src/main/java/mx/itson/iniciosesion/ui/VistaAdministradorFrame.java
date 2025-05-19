@@ -6,18 +6,27 @@ package mx.itson.iniciosesion.ui;
 
 
 /**
- * Clase para el desglose de información correspondiente al colaborador.
+ * Clase para el desglose de información correspondiente al administrador.
  * @author darkheaven
  */
-public class VistaColaboradorFrame extends javax.swing.JFrame {
+public class VistaAdministradorFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form SaldoFrame
      */
-    public VistaColaboradorFrame() {
+    public VistaAdministradorFrame() {
         initComponents();
-        //labels
-        lblNombre.setText("Bienvenido a una pantalla con absolutamente nada, usuario promedio");
+
+        lblNombre.setText("Gracias por venir, administrador");
+        
+        try {
+        java.awt.Image imagen = javax.imageio.ImageIO.read(new java.io.File("/home/darkheaven/Descargas/istockphoto-607259848-612x612.jpg"));
+        imagen = imagen.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+        lblPremio.setIcon(new javax.swing.ImageIcon(imagen));
+    } catch (java.io.IOException e) {
+        System.err.println("Error al cargar la imagen: " + e.getMessage());
+    }
+
     }
     
 
@@ -34,6 +43,7 @@ public class VistaColaboradorFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         lblNombre = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        lblPremio = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,9 +51,11 @@ public class VistaColaboradorFrame extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("LM Mono Caps 10", 1, 18)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Hola soy un label sin proposito");
+        jLabel3.setText("¡FELICIDADES!");
 
         lblNombre.setFont(new java.awt.Font("LM Mono Caps 10", 1, 14)); // NOI18N
+        lblNombre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNombre.setText("Gracias por venir, administrador");
 
         jButton1.setFont(new java.awt.Font("LM Mono Caps 10", 1, 15)); // NOI18N
         jButton1.setText("OK");
@@ -53,6 +65,9 @@ public class VistaColaboradorFrame extends javax.swing.JFrame {
             }
         });
 
+        lblPremio.setFont(new java.awt.Font("LM Mono Caps 10", 1, 14)); // NOI18N
+        lblPremio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -61,8 +76,12 @@ public class VistaColaboradorFrame extends javax.swing.JFrame {
                 .addGap(57, 57, 57)
                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(61, 61, 61))
-            .addComponent(lblNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+            .addComponent(lblPremio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -70,7 +89,9 @@ public class VistaColaboradorFrame extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                .addComponent(lblNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblPremio, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
                 .addGap(58, 58, 58))
@@ -117,14 +138,16 @@ public class VistaColaboradorFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaColaboradorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaAdministradorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaColaboradorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaAdministradorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaColaboradorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaAdministradorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VistaColaboradorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaAdministradorFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -140,5 +163,6 @@ public class VistaColaboradorFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblPremio;
     // End of variables declaration//GEN-END:variables
 }

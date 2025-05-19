@@ -4,12 +4,15 @@
  */
 package mx.itson.iniciosesion.ui;
 
+import static com.iniciosesion.encriptado.EncriptacionAES.encriptar;
 import com.iniciosesion.entidades.Administrador;
+import com.iniciosesion.entidades.Colaborador;
 import com.iniciosesion.persistencia.AdministradorDAO;
+import com.iniciosesion.persistencia.ColaboradorDAO;
 import javax.swing.JOptionPane;
 import mx.itson.iniciosesion.ui.RegistroDialog;
 /**
- *
+ * Frame para el despliegue de información correspondiente al acceso.
  * @author darkheaven
  */
 public class AccesoFrame extends javax.swing.JFrame {
@@ -188,22 +191,68 @@ public class AccesoFrame extends javax.swing.JFrame {
 
     private void btnVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarActionPerformed
        
-       AdministradorDAO admin = new AdministradorDAO();
+        
+        String correo = txtCorreo.getText().trim();
+        if(correo.isEmpty()) {
+            JOptionPane.showMessageDialog(AccesoFrame.this,
+                "Por favor ingrese un correo electrónico",
+                "Campo vacío",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-       Administrador tempAdmin = admin.obtenerPorCorreo(txtCorreo.getText());
+        String contrasenia = new String(pwContrasenia.getPassword()).trim();
+        if(contrasenia.isEmpty()) {
+            JOptionPane.showMessageDialog(AccesoFrame.this,
+                "Por favor ingrese una contraseña",
+                "Campo vacío",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-       if(tempAdmin.equals(true)){
-         AccesoFrame.this.dispose();
+        try {
+            AdministradorDAO adminDAO = new AdministradorDAO();
+            Administrador tempAdmin = adminDAO.obtenerPorCorreo(correo);
 
-                VistaColaboradorFrame colaboradorFrame = new VistaColaboradorFrame();
-                colaboradorFrame.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(AccesoFrame.this,
-                    "No se encontró el correo. Acceso denegado.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-                txtCorreo.setText("");  
-       }
+            if(tempAdmin != null) {
+                String contraseniaEncriptada = encriptar(contrasenia);
+
+                if(tempAdmin.getContrasenia().equals(contraseniaEncriptada)) {
+                    AccesoFrame.this.dispose();
+                    VistaAdministradorFrame adminFrame = new VistaAdministradorFrame();
+                    adminFrame.setVisible(true);
+                    return;
+                }
+            }
+
+            ColaboradorDAO colaboradorDAO = new ColaboradorDAO();
+            Colaborador tempColaborador = colaboradorDAO.obtenerPorCorreo(correo);
+
+            if(tempColaborador != null) {
+                String contraseniaEncriptada = encriptar(contrasenia);
+
+                if(tempColaborador.getContrasenia().equals(contraseniaEncriptada)) {
+                    AccesoFrame.this.dispose();
+                    VistaColaboradorFrame colaboradorFrame = new VistaColaboradorFrame();
+                    colaboradorFrame.setVisible(true);
+                    return;
+                }
+            }
+
+            JOptionPane.showMessageDialog(AccesoFrame.this,
+                "Credenciales incorrectas. Acceso denegado.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            txtCorreo.setText("");
+            pwContrasenia.setText("");
+
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(AccesoFrame.this,
+                "Error al verificar credenciales: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
  
     }//GEN-LAST:event_btnVerificarActionPerformed
 

@@ -17,7 +17,7 @@ public class Administrador {
     private int id;
     private String nombre;
     private String correo;
-    private String contraseña;
+    private String contrasenia;
 
     public Administrador() {
     }
@@ -25,7 +25,7 @@ public class Administrador {
     public Administrador(String nombre, String correo, String contraseña) {
         this.nombre = nombre;
         this.correo = correo;
-        this.contraseña = contraseña;
+        this.contrasenia = contrasenia;
     }
     
     public int getId() {
@@ -52,11 +52,11 @@ public class Administrador {
         this.correo = correo;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 }

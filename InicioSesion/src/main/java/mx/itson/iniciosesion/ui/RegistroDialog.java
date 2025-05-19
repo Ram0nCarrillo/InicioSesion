@@ -10,7 +10,8 @@ import javax.swing.JOptionPane;
 import com.iniciosesion.persistencia.ColaboradorDAO;
 
 /**
- *
+ * Clase para añadir un nuevo registro de tipo colaborador en su respectiva
+ * tabla.
  * @author darkheaven
  */
 public class RegistroDialog extends javax.swing.JDialog {
@@ -23,7 +24,11 @@ public class RegistroDialog extends javax.swing.JDialog {
         initComponents();
     }
 
-    
+    /**
+     * Método para validar si se rellenaron los campos de información del 
+     * registro.
+     * @return true or false
+     */
     private boolean validarCamposVacios() {
     if (txtNombre.getText().trim().isEmpty()) {
         mostrarError("Nombre", "No se ha ingresado un nombre");
@@ -48,6 +53,11 @@ public class RegistroDialog extends javax.swing.JDialog {
     return false;
 }
 
+    /**
+     * Método para dar formato a los mensajes de error.
+     * @param campo área donde se produjo el error.
+     * @param mensaje texto a mostrar
+     */
     private void mostrarError(String campo, String mensaje) {
         JOptionPane.showMessageDialog(
                 this,
@@ -56,6 +66,76 @@ public class RegistroDialog extends javax.swing.JDialog {
                 JOptionPane.ERROR_MESSAGE
     );
  }
+   
+    /**
+     * Método para validar que el formato del correo este correcto.
+     * @return true or false
+     */
+    private boolean validarFormatoCorreo() {
+    String correo = txtCorreo.getText().trim();
+    // Expresión regular para validar correo electrónico
+    String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+    
+    if (!correo.matches(regex)) {
+        mostrarError("Correo", "El formato del correo no es válido. Debe ser ejemplo@dominio.com");
+        txtCorreo.requestFocus();
+        return false;
+    }
+    return true;
+}
+    
+    /**
+     * Método para validar que la contraseña a ingresar en el registro cumpla
+     * con los requisitos minimos.
+     * @return true or false
+     */
+    private boolean validarRequisitosContrasenia() {
+    String contrasenia = new String(pwContrasenia.getPassword());
+    
+    // Requisitos mínimos para una contraseña:
+    // Al menos 8 caracteres
+    // Al menos una mayúscula
+    // Al menos una minúscula
+    // Al menos un número
+    // Al menos un carácter especial
+    
+    if (contrasenia.length() < 8) {
+        mostrarError("Contraseña", "La contraseña debe tener al menos 8 caracteres");
+        pwContrasenia.requestFocus();
+        return false;
+    }
+    
+    if (!contrasenia.matches(".*[A-Z].*")) {
+        mostrarError("Contraseña", "La contraseña debe contener al menos una letra mayúscula");
+        pwContrasenia.requestFocus();
+        return false;
+    }
+    
+    if (!contrasenia.matches(".*[a-z].*")) {
+        mostrarError("Contraseña", "La contraseña debe contener al menos una letra minúscula");
+        pwContrasenia.requestFocus();
+        return false;
+    }
+    
+    if (!contrasenia.matches(".*[0-9].*")) {
+        mostrarError("Contraseña", "La contraseña debe contener al menos un número");
+        pwContrasenia.requestFocus();
+        return false;
+    }
+    
+    if (!contrasenia.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*")) {
+        mostrarError("Contraseña", "La contraseña debe contener al menos un carácter especial");
+        pwContrasenia.requestFocus();
+        return false;
+    }
+    
+    return true;
+}
+
+    /**
+     * Método para validar que ambos campos de contraseñas coincidan.
+     * @return true or false
+     */
     private boolean validarContrasenias() {
         String contrasenia = new String(pwContrasenia.getPassword());
         String verificacion = new String(pwVerificacionContrasenia.getPassword());
@@ -213,13 +293,22 @@ public class RegistroDialog extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         // TODO add your handling code here:
-        if (validarCamposVacios()) {
+    if (validarCamposVacios()) {
         return; // Si hay campos vacíos, salimos del método
     }
     
+    if (!validarFormatoCorreo()) {
+        return;
+    }
+    
+    if (!validarRequisitosContrasenia()) {
+        return;
+        
+}
     if (!validarContrasenias()) {
         return;
     }
+    
     try{
       
         String contrasenia = new String(pwContrasenia.getPassword());
@@ -241,7 +330,7 @@ public class RegistroDialog extends javax.swing.JDialog {
         this.dispose(); 
         
     }catch(Exception err){
-        System.err.println("Ocurrió un error durante el registro"+err.getMessage());
+        System.err.println("Ocurrió un error durante el registro "+err.getMessage());
     }
     
         
